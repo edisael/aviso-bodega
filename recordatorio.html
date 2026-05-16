@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RECORDATORIO BODEGA</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        body {
+            background: #0b1120;
+            overflow: hidden;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            height: 100vh;
+            width: 100vw;
+        }
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1e3a8a 0%, #0f172a 70%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .titulo {
+            font-size: clamp(2rem, 6vw, 4.5rem);
+            font-weight: 900;
+            color: #fbbf24;
+            text-shadow: 0 0 30px rgba(251, 191, 36, 0.7);
+            animation: latido 2s infinite;
+            margin-bottom: 10px;
+        }
+        @keyframes latido {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .subtitulo {
+            color: #94a3b8;
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            margin-bottom: 15px;
+        }
+        /* NUEVO ESTILO PARA EL MENSAJE ESPECÍFICO */
+        .mensaje-especifico {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px dashed #ef4444;
+            color: #ffffff;
+            font-size: clamp(1.1rem, 2.5vw, 1.8rem);
+            font-weight: 700;
+            padding: 12px 35px;
+            border-radius: 12px;
+            margin-bottom: 35px;
+            max-width: 850px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .grid-items {
+            display: grid;
+            /* Esto hace que si hay espacio ponga más columnas, y si no, las acomode solas */
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 900px; /* Lo agrandamos un poco para que quepan mejor los 5 ítems */
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        .item {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid #fbbf24;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: white;
+            animation: flotar 4s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .item:nth-child(2) { animation-delay: 0.8s; }
+        .item:nth-child(3) { animation-delay: 1.6s; }
+        .item:nth-child(4) { animation-delay: 2.4s; }
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+        .contador-visual {
+            font-size: 1.5rem;
+            color: #ef4444;
+            font-weight: 800;
+            background: rgba(0,0,0,0.4);
+            padding: 10px 25px;
+            border-radius: 30px;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+        @media (max-width: 600px) {
+            .grid-items { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay">
+    <div class="titulo">⚠️ VER STOCK, ¿TOCA PEDIR? ⚠️</div>
+    <p class="subtitulo">Revisa existencias antes de que falten materiales críticos</p>
+    
+    <!-- AQUÍ SE AGREGA EL NUEVO MENSAJE EN PANTALLA -->
+    <div class="mensaje-especifico">
+        📅 Inventario para el martes 19 de mayo, favor organizar bodega
+    </div>
+    
+    <div class="grid-items">
+        <div class="item">🔶 LIJAS</div>
+        <div class="item">🔧 ABRAZADERAS</div>
+        <div class="item">⛏️ HUAIPES</div>
+        <div class="item">🧤 GUANTES NITRILO</div>
+	<div class="item">📋 TALONARIOS</div>
+    </div>
+
+    <div class="contador-visual" id="timer">El aviso se cerrará en 5 segundos...</div>
+</div>
+
+<script>
+    document.documentElement.requestFullscreen().catch(() => {});
+
+    document.addEventListener('keydown', (e) => {
+        const tecla = e.key.toLowerCase();
+        if ((e.ctrlKey && (tecla === 'w' || tecla === 'r')) || 
+            (e.altKey && tecla === 'f4') || tecla === 'f11' || tecla === 'escape') {
+            e.preventDefault();
+        }
+    });
+
+    let segundosRestantes = 5;
+    const cuentaRegresiva = setInterval(() => {
+        segundosRestantes--;
+        document.getElementById('timer').textContent = `El aviso se cerrará en ${segundosRestantes} segundos...`;
+        if (segundosRestantes <= 0) {
+            clearInterval(cuentaRegresiva);
+            window.close();
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>
